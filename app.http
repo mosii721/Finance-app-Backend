@@ -1,0 +1,15 @@
+@url = http://localhost:5000
+
+POST {{url}}/accounts
+Content-Type: application/json
+
+{
+    "name": "Project Mita",
+    "type": "savings",
+    "balance": 1000,
+    "currency": "USD",
+    "isActive": true
+}
+
+###
+GET {{url}}/accounts/1
