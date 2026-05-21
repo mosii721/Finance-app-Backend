@@ -5,6 +5,16 @@ export class CreateTransactionDto {
     @IsNumber()
     Amount: number;
 
+    @IsString()
+    accountId:string;
+
+    @IsString()
+    userId:string;
+    
+    @IsString()
+    @IsOptional()
+    categoryId?:string;
+
     @IsEnum(TransactionType)
     type: TransactionType;
 

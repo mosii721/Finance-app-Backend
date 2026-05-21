@@ -6,6 +6,10 @@ export class CreateCategoryDto {
     @IsNotEmpty()
     name: string;
 
+    @IsString()
+    @IsNotEmpty()
+    userId: string;
+
     @IsEnum(CategoryType)
     type: CategoryType;
 

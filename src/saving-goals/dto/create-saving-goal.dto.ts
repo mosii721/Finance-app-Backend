@@ -6,6 +6,10 @@ export class CreateSavingGoalDto {
     @IsNotEmpty()
     name:string;
 
+    @IsString()
+    @IsNotEmpty()
+    userId:string;
+
     @IsNumber()
     @IsNotEmpty()
     targetAmount: number;

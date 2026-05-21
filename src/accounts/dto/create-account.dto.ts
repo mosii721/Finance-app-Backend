@@ -6,6 +6,10 @@ export class CreateAccountDto {
     @IsNotEmpty()
     name: string;
 
+    @IsString()
+    @IsNotEmpty()
+    userId:string
+
     @IsEnum(AccountType)
     type: AccountType;
 
