@@ -1,26 +1,52 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>){}
+
+  async create(createUserDto: CreateUserDto) {
+    const existUser = await this.usersRepository.findOne({where:{email: createUserDto.email},select:{id:true}})
+
+    if(existUser){
+      throw new Error('User with existing email already exists')
+    }
+
+    const newUser = await this.usersRepository.create({
+      name: createUserDto.name,
+      email: createUserDto.email,
+      phone: createUserDto.phone,
+      role: createUserDto.role,
+      password: createUserDto.password,
+      currency: createUserDto.currency ?? 'KES',
+    })
+
+    const savedUser = await this.usersRepository.save(newUser)
+    return savedUser;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll(email:string, name:string) {
+    if(name || email) {
+      return await this.usersRepository.findOne({where:{name:name, email:email},
+        select:{id:true,email:true,name:true,phone:true,currency:true,role:true,createdAt:true,updatedAt:true},
+        relations:{account:true, category:true, budget:true, savingsGoal:true, transaction:true}})
+    }
+    return await this.usersRepository.find({relations:{account:true, category:true, budget:true, savingsGoal:true, transaction:true}});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    return await this.usersRepository.findOneBy({id});
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    return await this.usersRepository.update(id, updateUserDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    return await this.usersRepository.delete(id);
   }
 }

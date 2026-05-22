@@ -1,26 +1,52 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Category } from './entities/category.entity';
+import { Repository } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class CategoriesService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(@InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
+  @InjectRepository(User) private readonly userRepository: Repository<User>) {}
+
+  async create(createCategoryDto: CreateCategoryDto) {
+    const existUser = await this.userRepository.findOne({where:{id: createCategoryDto.userId}, select:{id:true}})
+
+    if(!existUser) {
+      throw new Error('This User does not exist')
+    }
+
+    const newCategory = this.categoryRepository.create({
+      name: createCategoryDto.name,
+      type: createCategoryDto.type,
+      colour: createCategoryDto.colour,
+      icon: createCategoryDto.icon,
+      isDefault: createCategoryDto.isDefault,
+      user: existUser,
+    })
+    return await this.categoryRepository.save(newCategory);
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll(name:string) {
+    if(name) {
+      return await this.categoryRepository.findOne({where:{name:name},
+      select:{id:true, name:true, type:true, colour:true, isDefault:true, createdAt:true, updatedAt:true},
+      relations:{user:true, transaction:true, budget:true}})
+    }
+    return await this.categoryRepository.find({relations:{user:true, transaction:true, budget:true}});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string) {
+    return await this.categoryRepository.findOneBy({id});
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    return await this.categoryRepository.update(id,updateCategoryDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    return await this.categoryRepository.delete(id);
   }
 }

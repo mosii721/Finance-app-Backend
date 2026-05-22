@@ -19,16 +19,16 @@ export class BudgetsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.budgetsService.findOne(+id);
+    return this.budgetsService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBudgetDto: UpdateBudgetDto) {
-    return this.budgetsService.update(+id, updateBudgetDto);
+    return this.budgetsService.update(id, updateBudgetDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.budgetsService.remove(+id);
+    return this.budgetsService.remove(id);
   }
 }
