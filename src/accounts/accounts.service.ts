@@ -22,7 +22,7 @@ export class AccountsService {
       name: createAccountDto.name,
       balance: createAccountDto.balance,
       type: createAccountDto.type,
-      currency: createAccountDto.currency,
+      currency: createAccountDto.currency ?? 'KES',
       isActive: createAccountDto.isActive ?? true,
       user: existUser
     })

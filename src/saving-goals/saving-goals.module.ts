@@ -9,6 +9,6 @@ import { User } from 'src/users/entities/user.entity';
 @Module({
   imports: [DatabaseModule, TypeOrmModule.forFeature([SavingGoal,User])],
   controllers: [SavingGoalsController],
-  providers: [SavingGoalsService],
+  providers: [SavingGoalsService]
 })
 export class SavingGoalsModule {}

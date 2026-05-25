@@ -5,11 +5,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SavingGoal } from './entities/saving-goal.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
+import { AccountsService } from 'src/accounts/accounts.service';
+import { Account, AccountType } from 'src/accounts/entities/account.entity';
 
 @Injectable()
 export class SavingGoalsService {
   constructor(@InjectRepository(SavingGoal) private readonly savingsGoalRepository: Repository<SavingGoal>,
-  @InjectRepository(User) private readonly usersRepository: Repository<User>) {}
+  @InjectRepository(User) private readonly usersRepository: Repository<User>,) {}
 
   async create(createSavingGoalDto: CreateSavingGoalDto) {
     const existUser = await this.usersRepository.findOne({where:{id: createSavingGoalDto.userId}, select:{id:true}})
@@ -26,6 +28,7 @@ export class SavingGoalsService {
       targetDate: createSavingGoalDto.targetDate,
       user: existUser
     })
+
     return await this.savingsGoalRepository.save(newSavingsGoal);
   }
 

@@ -3,7 +3,7 @@ import { TransactionType } from "../entities/transaction.entity";
 
 export class CreateTransactionDto {
     @IsNumber()
-    Amount: number;
+    amount: number;
 
     @IsString()
     accountId:string;

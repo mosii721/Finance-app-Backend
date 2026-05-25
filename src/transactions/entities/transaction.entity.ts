@@ -24,7 +24,7 @@ export class Transaction {
     categoryId:string;
 
     @Column({type:'decimal', precision:15, scale:2})
-    Amount: number;
+    amount: number;
     
     @Column({type:'enum', enum:TransactionType})
     type: TransactionType;

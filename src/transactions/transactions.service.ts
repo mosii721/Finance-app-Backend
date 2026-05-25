@@ -14,24 +14,55 @@ export class TransactionsService {
   @InjectRepository(Account) private readonly accountsRepository: Repository<Account>,
   @InjectRepository(User) private readonly usersRepository: Repository<User>,
   @InjectRepository(Category) private readonly categoryRepository: Repository<Category>) {}
-  
-  create(createTransactionDto: CreateTransactionDto) {
-    return 'This action adds a new transaction';
+
+  async create(createTransactionDto: CreateTransactionDto) {
+    const existUser = await this.usersRepository.findOne({where:{id: createTransactionDto.userId}, select:{id:true}})
+
+    if(!existUser) {
+      throw new Error('This User does not exist')
+    }
+
+    const existAccount = await this.accountsRepository.findOne({where:{id: createTransactionDto.accountId}, select:{id:true}})
+
+    if(!existAccount) {
+      throw new Error('The account does not exist')
+    }
+
+    let existCategory = null
+    if(createTransactionDto.categoryId) {
+      const existCategory = await this.categoryRepository.findOne({where:{id: createTransactionDto.categoryId}, select:{id:true}})
+
+      if(!existCategory) {
+        throw new Error('This Category does not exist')
+      }
+    }
+
+    const newTransaction = this.transactionsRepository.create({
+      amount: createTransactionDto.amount,
+      type: createTransactionDto.type,
+      description: createTransactionDto.description,
+      notes: createTransactionDto.notes,
+      transactionDate: createTransactionDto.transactionDate,
+      user: existUser,
+      account: existAccount,
+      category: existCategory ?? undefined,
+    })
+    return await this.transactionsRepository.save(newTransaction);
   }
 
-  findAll() {
-    return `This action returns all transactions`;
+  async findAll() {
+    return await this.transactionsRepository.find({relations:{account:true,category:true,user:true}});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} transaction`;
+  async findOne(id: string) {
+    return await this.transactionsRepository.findOneBy({id});
   }
 
-  update(id: number, updateTransactionDto: UpdateTransactionDto) {
-    return `This action updates a #${id} transaction`;
+  async update(id: string, updateTransactionDto: UpdateTransactionDto) {
+    return await this.transactionsRepository.update(id,updateTransactionDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
+  async remove(id: string) {
+    return await this.transactionsRepository.delete(id);
   }
 }

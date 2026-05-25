@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { SavingGoalStatus } from "../entities/saving-goal.entity";
 
 export class CreateSavingGoalDto {
@@ -9,6 +9,10 @@ export class CreateSavingGoalDto {
     @IsString()
     @IsNotEmpty()
     userId:string;
+
+    @IsString()
+    @IsOptional()
+    accountId:string;
 
     @IsNumber()
     @IsNotEmpty()
@@ -23,4 +27,9 @@ export class CreateSavingGoalDto {
 
     @IsEnum(SavingGoalStatus)
     status: SavingGoalStatus;
+}
+
+export class SavingsAmountDto {
+  @IsNumber()
+  addAmount: number;
 }

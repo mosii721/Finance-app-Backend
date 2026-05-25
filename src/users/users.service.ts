@@ -4,10 +4,16 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import * as Bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>){}
+
+  private async hashPassword(password:string) {
+    const salt = await Bcrypt.genSalt(10)
+    return Bcrypt.hash(password,salt)
+  }
 
   async create(createUserDto: CreateUserDto) {
     const existUser = await this.usersRepository.findOne({where:{email: createUserDto.email},select:{id:true}})
@@ -16,12 +22,12 @@ export class UsersService {
       throw new Error('User with existing email already exists')
     }
 
-    const newUser = await this.usersRepository.create({
+    const newUser = this.usersRepository.create({
       name: createUserDto.name,
       email: createUserDto.email,
       phone: createUserDto.phone,
       role: createUserDto.role,
-      password: createUserDto.password,
+      password: await this.hashPassword(createUserDto.password),
       currency: createUserDto.currency ?? 'KES',
     })
 
