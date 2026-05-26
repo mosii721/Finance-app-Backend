@@ -1,4 +1,4 @@
-import { UnauthorizedException } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
@@ -13,6 +13,7 @@ interface JwtPayloadRt extends JwtPayload {
     refreshToken: string
 }
 
+@Injectable()
 export class RtStrategy extends PassportStrategy(Strategy,'jwt-rt') {
     constructor(private readonly configService: ConfigService) {
         super({

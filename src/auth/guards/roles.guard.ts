@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext } from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { User, UserRole } from "src/users/entities/user.entity";
 import { ROLES_KEY } from "../decorators/role.decorator";
@@ -11,7 +11,7 @@ interface UserRequest extends Request{
     user?: JwtPayload
 }
 
-
+@Injectable()
 export class RolesGuard implements CanActivate{
     constructor(@InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly reflector:Reflector) {}
