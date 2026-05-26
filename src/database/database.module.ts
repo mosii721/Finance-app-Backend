@@ -12,7 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
                 autoLoadEntities:true,
                 ssl:{rejectUnauthorized:false},
                 logging: configService.getOrThrow<boolean>('DB_LOG'),
-                migrations:[__dirname + 'migrations/**/*{.ts,.js}'],
+                migrations:[__dirname + '/migrations/**/*{.ts,.js}'],
             }),
             inject: [ConfigService]
         })

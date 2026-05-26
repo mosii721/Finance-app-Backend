@@ -8,10 +8,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AtStrategy } from './strategies/at.strategy';
 import { RtStrategy } from './strategies/rt.strategy';
+import { RolesGuard } from './guards/roles.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [DatabaseModule, TypeOrmModule.forFeature([User]), JwtModule.register({global: true}), PassportModule],
   controllers: [AuthController],
-  providers: [AuthService,AtStrategy,RtStrategy],
+  providers: [AuthService,AtStrategy,RtStrategy,{
+    provide:APP_GUARD,
+    useClass: RolesGuard
+  }],
 })
 export class AuthModule {}

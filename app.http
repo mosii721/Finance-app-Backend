@@ -1,5 +1,28 @@
 @url = http://localhost:5000
 
+@accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NDliMzU2OC1hMWYxLTRjOGEtYmVlNS01ZjI1MGFhYzY0ZmQiLCJyb2xlIjoidXNlciIsImlhdCI6MTc3OTc4NjY4NiwiZXhwIjoxNzc5Nzg3NTg2fQ.6D6awe2OEunNOT1tATkTrTxHgq8I0QtFjKK0JIPtCXw
+@refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NDliMzU2OC1hMWYxLTRjOGEtYmVlNS01ZjI1MGFhYzY0ZmQiLCJyb2xlIjoidXNlciIsImlhdCI6MTc3OTc4NjY4NiwiZXhwIjoxNzgwMzkxNDg2fQ.g0hlpeu00gXGLTlmYW5QVUHTNRvQe58-6MwCyk2XIwg
+
+###
+POST {{url}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "mikekiprop@example.com",
+    "password": "securepassword"
+}
+
+###
+GET  {{ url}}/auth/logout/449b3568-a1f1-4c8a-bee5-5f250aac64fd
+Authorization: Bearer {{accessToken}}
+
+
+###
+GET  {{ url}}/auth/refresh?id=449b3568-a1f1-4c8a-bee5-5f250aac64fd
+Authorization: Bearer {{refreshToken}}
+
+
+###
 POST {{url}}/accounts
 Content-Type: application/json
 
@@ -12,4 +35,47 @@ Content-Type: application/json
 }
 
 ###
-GET {{url}}/accounts/1
+GET {{url}}/accounts
+
+###
+POST {{url}}/users
+Content-Type: application/json
+
+{
+    "name": "Mike Kiprop",
+    "email": "mikekiprop@example.com",
+    "phone": "+254700000000",
+    "currency": "USD",
+    "password": "securepassword",
+    "role": "user"
+}
+
+###
+POST {{url}}/users
+Content-Type: application/json
+
+{
+    "name": "Mike Kiprop",
+    "email": "mikekiprop@example.com",
+    "phone": "+254700000000",
+    "currency": "USD",
+    "password": "securepassword",
+    "role": "user"
+}
+
+###
+POST {{url}}/users
+Content-Type: application/json
+
+{
+    "name": "Mk",
+    "email": "mk@example.com",
+    "phone": "+254700000000",
+    "currency": "USD",
+    "password": "securepassword",
+    "role": "guest"
+}
+
+###
+GET {{url}}/users
+Authorization: Bearer {{accessToken}}

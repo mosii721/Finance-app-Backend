@@ -1,4 +1,4 @@
-import { IsCurrency, IsEmail, IsEnum, IsISO4217CurrencyCode, IsNotEmpty, IsString, MinLength } from "class-validator";
+import { IsEmail, IsEnum, IsISO4217CurrencyCode, IsNotEmpty, IsString, MinLength } from "class-validator";
 import { UserRole } from "../entities/user.entity";
 
 export class CreateUserDto {

@@ -30,7 +30,7 @@ export class User {
     @Column()
     password: string;
 
-    @Column({nullable:true, default:null})
+    @Column({type:'text',nullable:true, default:null})
     hashedRefreshToken: string | null ;
 
     @Column({type:'enum', enum:UserRole, default:UserRole.USER})

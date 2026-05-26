@@ -27,7 +27,7 @@ export class AuthService {
   }
 
   private async hashRefreshToken(token:string) {
-    const salt = Bcrypt.genSalt(10)
+    const salt = await Bcrypt.genSalt(10)
     return Bcrypt.hash(token, salt)
   }
 
@@ -37,7 +37,7 @@ export class AuthService {
   }
 
   async login(createAuthDto: CreateAuthDto) {
-    const findUser = await this.userRepository.findOne({where:{email: createAuthDto.email}, select:{id:true, email:true, role: true, hashedRefreshToken:true}})
+    const findUser = await this.userRepository.findOne({where:{email: createAuthDto.email}, select:{id:true, email:true, role: true, hashedRefreshToken:true, password:true}})
 
     if(!findUser) {
       throw new NotFoundException('The email does not exist')

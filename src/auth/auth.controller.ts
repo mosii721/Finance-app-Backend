@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Param, Query, Req, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { Request } from 'express';
+import { Public } from './decorators/public.decorator';
+import { RtGuard } from './guards/rt.guard';
 
 interface RequestWithUser extends Request{
   user:{
@@ -15,7 +17,8 @@ interface RequestWithUser extends Request{
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
+  @Public()
+  @Post('login')
   login(@Body() createAuthDto: CreateAuthDto) {
     return this.authService.login(createAuthDto);
   }
@@ -25,7 +28,9 @@ export class AuthController {
     return this.authService.logout(id)
   }
 
-  @Get('refreshToken')
+  @Public()
+  @UseGuards(RtGuard)
+  @Get('refresh')
   refreshToken(@Query('id') id:string, @Req() req:RequestWithUser) {
     const user= req.user
     if(user.sub !== id){
