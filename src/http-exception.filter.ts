@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, HttpException, HttpStatus } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
-import { Request, response } from "express";
+import { Request, Response } from "express";
 
 interface MyResponseObj{
     statusCode: number,
@@ -26,6 +26,7 @@ export class AllExecptionFilters extends BaseExceptionFilter{
     catch(exception: any, host: ArgumentsHost){
         const ctx = host.switchToHttp()
         const request = ctx.getRequest<Request>()
+        const response = ctx.getResponse<Response>()
         const clientIp = this.getClientIp(request)
 
         const myResponseObj: MyResponseObj = {
@@ -50,7 +51,7 @@ export class AllExecptionFilters extends BaseExceptionFilter{
                                 ? myResponseObj.response
                                 : JSON.stringify(myResponseObj.response)
 
-        const fullLog = `[ERROR] ${myResponseObj.timestamp} | Client Ip ${clientIp} | Path ${request.url} | Message ${logMessage}`
+        const fullLog = `[ERROR] ${myResponseObj.timestamp} | Client Ip: ${clientIp} | Path: ${request.url} | Message: ${logMessage}`
         console.error(fullLog)
 
         if(exception instanceof Error) {
