@@ -23,12 +23,12 @@ export class TransactionsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTransactionDto: UpdateTransactionDto) {
-    return this.transactionsService.update(id, updateTransactionDto);
+  update(@Param('id') id: string, @Param('userId') userId:string, @Body() updateTransactionDto: UpdateTransactionDto) {
+    return this.transactionsService.update(id, userId, updateTransactionDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.transactionsService.remove(id);
+  remove(@Param('id') id: string, @Param('userId') userId:string) {
+    return this.transactionsService.remove(id, userId);
   }
 }

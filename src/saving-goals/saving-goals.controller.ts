@@ -12,6 +12,16 @@ export class SavingGoalsController {
     return this.savingGoalsService.create(createSavingGoalDto);
   }
 
+  @Post('deposit')
+  deposit(@Param('id') id:string, @Body() body:{amount:number}) {
+    return this.savingGoalsService.addToSavingGoal(id, body.amount)
+  }
+
+  @Post('withdraw')
+  withdraw(@Param('id') id:string, @Body() body:{amount:number}) {
+    return this.savingGoalsService.withdrawFromSavingsGoal(id, body.amount)
+  }
+
   @Get()
   findAll(@Query('name') name:string) {
     return this.savingGoalsService.findAll(name);

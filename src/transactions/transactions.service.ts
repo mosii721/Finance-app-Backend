@@ -124,7 +124,7 @@ export class TransactionsService {
     return await this.transactionsRepository.findOneBy({id});
   }
 
-  async update(id: string, updateTransactionDto: UpdateTransactionDto,  userId: string) {
+  async update(id: string,  userId: string, updateTransactionDto: UpdateTransactionDto) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();

@@ -1,5 +1,5 @@
 import { AccountType } from "../entities/account.entity";
-import { IsBoolean, IsEnum, IsISO4217CurrencyCode, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsBoolean, IsEnum, IsISO4217CurrencyCode, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateAccountDto {
     @IsString()
@@ -7,7 +7,7 @@ export class CreateAccountDto {
     name: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     userId:string
 
     @IsEnum(AccountType)

@@ -11,8 +11,8 @@ export class AccountsService {
   constructor(@InjectRepository(Account) private readonly accountRepository: Repository<Account>,
   @InjectRepository(User) private readonly userRepository: Repository<User>){}
 
-  async create(createAccountDto: CreateAccountDto) {
-    const existUser = await this.userRepository.findOne({where:{id: createAccountDto.userId}, select:{id:true}})
+  async create(createAccountDto: CreateAccountDto, userId:string) {
+    const existUser = await this.userRepository.findOne({where:{id:userId}, select:{id:true}})
 
     if(!existUser) {
       throw new Error('The User does not exist')

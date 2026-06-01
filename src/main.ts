@@ -9,7 +9,7 @@ async function bootstrap() {
 
   const { httpAdapter } = app.get(HttpAdapterHost)
   app.useGlobalFilters(new AllExecptionFilters(httpAdapter))
-  app.useGlobalPipes( new ValidationPipe({ whitelist:true }))
+  app.useGlobalPipes( new ValidationPipe({ whitelist:true, forbidNonWhitelisted: true })) // forbidnonwhitelisted throws an error if extra field is sent
   
   const configService = app.get(ConfigService);
   const PORT = configService.getOrThrow<number>('PORT');
