@@ -36,7 +36,7 @@ export class Transaction {
     notes?: string;
 
     @Column({type:'date'})
-    transactionDate: string;
+    transactionDate: Date;
 
     @Column({type:'timestamp', default:() => 'CURRENT_TIMESTAMP'})
     createdAt:string;
@@ -44,7 +44,7 @@ export class Transaction {
     @Column({type:'timestamp', default:() => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP'})
     updatedAt:string;
 
-    @ManyToOne(() => Account, account => account.transaction, {onDelete:'SET NULL'})
+    @ManyToOne(() => Account, account => account.transaction, {onDelete:'SET NULL', nullable:true})
     @JoinColumn({name: 'accountId'})
     account: Relation<Account>;
 

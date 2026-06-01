@@ -1,12 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSavingGoalDto } from './dto/create-saving-goal.dto';
 import { UpdateSavingGoalDto } from './dto/update-saving-goal.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SavingGoal } from './entities/saving-goal.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
-import { AccountsService } from 'src/accounts/accounts.service';
-import { Account, AccountType } from 'src/accounts/entities/account.entity';
 
 @Injectable()
 export class SavingGoalsService {
@@ -52,4 +50,29 @@ export class SavingGoalsService {
   async remove(id: string) {
     return await this.savingsGoalRepository.delete(id);
   }
+
+  async addToSavingGoal(savingGoalId: string, amount: number) {
+    const savingGoal = await this.savingsGoalRepository.findOne({where:{id: savingGoalId}, select:{id:true, currentAmount:true}})
+
+    if(!savingGoal) {
+      throw new NotFoundException('Saving Goal not found')
+    }
+
+    savingGoal.currentAmount += amount;
+
+    return await this.savingsGoalRepository.save(savingGoal)
+  }
+
+  async withdrawFromSavingsGoal(savingGoalId: string, amount: number) {
+    const savingsGoal =  await this.savingsGoalRepository.findOne({where:{id: savingGoalId}, select:{id:true, currentAmount:true}})
+
+    if(!savingsGoal) {
+      throw new NotFoundException('Saving Goal not found')
+    }
+
+    savingsGoal.currentAmount -= amount;
+
+    return await this.savingsGoalRepository.save(savingsGoal)
+  }
+
 }
