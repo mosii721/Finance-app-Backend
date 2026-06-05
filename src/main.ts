@@ -3,9 +3,18 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { AllExecptionFilters } from './http-exception.filter';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(helmet())
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,PUT,POST,HEAD,PATCH,DELETE',
+    allowedHeaders: 'Content-type,Accept,Authorization,X-Requested-with',
+    Credentials: true,
+  })
 
   const { httpAdapter } = app.get(HttpAdapterHost)
   app.useGlobalFilters(new AllExecptionFilters(httpAdapter))
